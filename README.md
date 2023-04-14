@@ -6,13 +6,11 @@ This is a social media API project made in Java using Spring boot and deployment
 <li>Installation</li>
 <li>Usage</li>
 <li>License</li>
-<br>
 <h2>Features</h2>
 <li>Add a friend</li>
 <li>Check a friend profile</li>
 <li>Type a mensage</li>
 <li>Check friends list</li>
-<br>
 <h2>Installation</h2>
 Clone the repository: git clone https://github.com/GabrielBrisson/SocialMediaAPI
 <br>
