@@ -1,11 +1,10 @@
 <h1>Social Media API Project</h1>
-This is a social media API project 
+This is a social media API project made in Java using Spring boot and deployment by AWS 
 
 <h2>Table of Contents</h2>
 <li>Features</li>
 <li>Installation</li>
 <li>Usage</li>
-<li>Contributing</li>
 <li>License</li>
 <br>
 <h2>Features</h2>
@@ -18,15 +17,7 @@ This is a social media API project
 Clone the repository: git clone https://github.com/GabrielBrisson/SocialMediaAPI
 <br>
 <h2>Usage</h2>
-Create an account or log in with an existing one
-Customize your profile
-Create a post and share it with your followers
-Like and comment on posts from other users
-Follow users to see their posts in your feed
-Receive real-time notifications for likes, comments, and new followers
-Search for posts or users using keywords
-Contributing
-Contributions are welcome! Please follow the contributing guidelines.
+Basic CRUD to provide information about friends relation
 <br>
 <h2>License</h2>
 This project is licensed under the MIT License.
