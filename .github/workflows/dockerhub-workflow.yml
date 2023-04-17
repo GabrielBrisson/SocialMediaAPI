@@ -1,0 +1,20 @@
+name: Publicar branch main no DockerHub
+on:
+  push:
+    branches: ['main']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Logar no DockerHub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DKRHUB_USERNAME }}
+          password: ${{ secrets.DKRHUB_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build . --file Dockerfile --tag ${{ secrets.DKRHUB_USERNAME }}/socialmedia-api
+
+      - name: Docker Push
+        run: docker push ${{ secrets.DKRHUB_USERNAME }}/socialmedia-api
