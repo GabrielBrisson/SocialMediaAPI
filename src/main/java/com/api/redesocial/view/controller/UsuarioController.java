@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.redesocial.services.UsuarioService;
 import com.api.redesocial.shared.UsuarioDto;
+import com.api.redesocial.view.model.UsuarioAlteracao;
 import com.api.redesocial.view.model.UsuarioRequest;
 import com.api.redesocial.view.model.UsuarioResponse;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     
     @Autowired
@@ -72,9 +73,22 @@ public class UsuarioController {
         return new ResponseEntity<>(mapper.map(usuarioCadastrado, UsuarioResponse.class), HttpStatus.CREATED);
     }
 
+    @PutMapping(value = "/atualizarUsuario/{id}")
+    public ResponseEntity<UsuarioResponse> atualizarUsuario(@PathVariable String id, @RequestBody UsuarioAlteracao usuario) {
+        UsuarioDto dto = mapper.map(usuario, UsuarioDto.class);
+        UsuarioDto usuarioAtualizado = userService.atualizarUsuario(id, dto);
+
+        return new ResponseEntity<>(mapper.map(usuarioAtualizado, UsuarioResponse.class), HttpStatus.OK);
+    }
+
     @PutMapping(value = "/realizarAmizade/{id1}/{id2}")
     public ResponseEntity<Void> realizarAmizade(@PathVariable String id1, @PathVariable String id2) {
-        userService.realizarAmizade(id1, id2);
+        boolean existe = userService.realizarAmizade(id1, id2);
+
+        if (existe) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

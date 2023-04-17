@@ -51,7 +51,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void realizarAmizade(String id1, String id2) {
+    public UsuarioDto atualizarUsuario(String id, UsuarioDto usuarioDto) {
+        Usuario usuario = mapper.map(usuarioDto, Usuario.class);
+        usuario.setId(id);
+        Usuario atualizarUsuario = repository.save(usuario);
+
+        return mapper.map(atualizarUsuario, UsuarioDto.class);
+    }
+
+    @Override
+    public Boolean realizarAmizade(String id1, String id2) {
         Optional<UsuarioDto> user1Dto = obterPorId(id1);
         Optional<UsuarioDto> user2Dto = obterPorId(id2);
         Usuario user1 = mapper.map(user1Dto.get(), Usuario.class);
@@ -63,20 +72,30 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (user2.getAmigo() == null) {
             user2.setAmigo(new ArrayList<Usuario>());
         }
+        boolean existe = false;
+        for (Usuario u : user1.getAmigo()) {
+            if (u.getId().equals(id2)) {
+                existe = true;
+            }
+        }
 
-        Usuario amigoUser1 = new Usuario();
-        amigoUser1.setId(user2.getId());
-        amigoUser1.setName(user2.getName());
+        if (!existe) {
+            Usuario amigoUser1 = new Usuario();
+            amigoUser1.setId(user2.getId());
+            amigoUser1.setName(user2.getName());
 
-        Usuario amigoUser2 = new Usuario();
-        amigoUser2.setId(user1.getId());
-        amigoUser2.setName(user1.getName());
+            Usuario amigoUser2 = new Usuario();
+            amigoUser2.setId(user1.getId());
+            amigoUser2.setName(user1.getName());
 
-        user1.getAmigo().add(amigoUser1);
-        user2.getAmigo().add(amigoUser2);
+            user1.getAmigo().add(amigoUser1);
+            user2.getAmigo().add(amigoUser2);
 
-        repository.save(user1);
-        repository.save(user2);
+            repository.save(user1);
+            repository.save(user2);
+        }
+
+        return existe;
     }
 
     @Override
@@ -112,4 +131,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void removerUsuario(String id) {
         repository.deleteById(id);
     }
+    
 }
