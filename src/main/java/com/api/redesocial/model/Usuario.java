@@ -10,25 +10,39 @@ public class Usuario {
     @Id
     private String id;
     private String name;
+    private List<Message> message;
     private List<Usuario> amigo;
 
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Message> getMessage() {
+        return message;
+    }
+
+    public void setMessage(List<Message> mensagem) {
+        this.message = mensagem;
+    }
+
     public List<Usuario> getAmigo() {
         return amigo;
     }
+
     public void setAmigo(List<Usuario> amigo) {
         this.amigo = amigo;
-    }
-    
+    }    
+
 }

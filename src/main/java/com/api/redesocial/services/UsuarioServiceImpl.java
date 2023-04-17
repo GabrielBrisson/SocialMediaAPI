@@ -1,5 +1,6 @@
 package com.api.redesocial.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.redesocial.model.Message;
 import com.api.redesocial.model.Usuario;
 import com.api.redesocial.repository.UsuarioRepositorio;
 import com.api.redesocial.shared.UsuarioDto;
@@ -51,6 +53,25 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public void criarMensagem(String mensagem, String id) {
+        Optional<UsuarioDto> dto = obterPorId(id);
+
+        Usuario user = repository.findById(dto.get().getId()).orElseThrow();
+
+        if (user.getMessage() == null) {
+            user.setMessage(new ArrayList<Message>());
+        }
+
+        Message message = new Message();
+        message.setValue(mensagem);
+        message.setDataCriacao(LocalDateTime.now());
+
+        user.getMessage().add(message);
+
+        repository.save(user);
+    }
+
+    @Override
     public UsuarioDto atualizarUsuario(String id, UsuarioDto usuarioDto) {
         Usuario usuario = mapper.map(usuarioDto, Usuario.class);
         usuario.setId(id);
@@ -72,6 +93,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (user2.getAmigo() == null) {
             user2.setAmigo(new ArrayList<Usuario>());
         }
+
         boolean existe = false;
         for (Usuario u : user1.getAmigo()) {
             if (u.getId().equals(id2)) {
@@ -131,5 +153,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void removerUsuario(String id) {
         repository.deleteById(id);
     }
-    
+
 }

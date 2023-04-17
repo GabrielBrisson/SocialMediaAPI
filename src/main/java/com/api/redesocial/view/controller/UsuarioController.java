@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.redesocial.model.Message;
 import com.api.redesocial.services.UsuarioService;
 import com.api.redesocial.shared.UsuarioDto;
 import com.api.redesocial.view.model.UsuarioAlteracao;
@@ -26,7 +27,7 @@ import com.api.redesocial.view.model.UsuarioResponse;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    
+
     @Autowired
     private UsuarioService userService;
 
@@ -71,6 +72,13 @@ public class UsuarioController {
         UsuarioDto usuarioCadastrado = userService.inserirUsuario(usuarioDto);
 
         return new ResponseEntity<>(mapper.map(usuarioCadastrado, UsuarioResponse.class), HttpStatus.CREATED);
+    }
+    
+    @PostMapping(value = "/criarMensagem/{id}")
+    public ResponseEntity<Void> criarMensagem(@PathVariable String id, @RequestBody Message mensagem) {
+        userService.criarMensagem(mensagem.getValue(), id);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/atualizarUsuario/{id}")
