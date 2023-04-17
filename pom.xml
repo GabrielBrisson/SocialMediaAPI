@@ -49,7 +49,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
         <finalName>api-socialmedia-prod</finalName>
         <plugins>
@@ -75,5 +74,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
