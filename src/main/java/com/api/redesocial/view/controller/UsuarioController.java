@@ -23,7 +23,7 @@ import com.api.redesocial.view.model.UsuarioRequest;
 import com.api.redesocial.view.model.UsuarioResponse;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     
     @Autowired
