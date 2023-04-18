@@ -43,15 +43,10 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/obterPorId/{id}")
-    public ResponseEntity<UsuarioResponse> getUserById(@PathVariable String id) {
+    public ResponseEntity<UsuarioDto> getUserById(@PathVariable String id) {
         Optional<UsuarioDto> userDto = userService.obterPorId(id);
-
-        if (userDto.isPresent()) {
-            UsuarioResponse response = mapper.map(userDto.get(), UsuarioResponse.class);
-            return new ResponseEntity<>(response, HttpStatus.FOUND);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return userDto.map(usuarioDto -> new ResponseEntity<>(usuarioDto, HttpStatus.FOUND))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value = "/consultarAmizade/{id}")
@@ -88,7 +83,6 @@ public class UsuarioController {
     @DeleteMapping(value = "/removerUsuario/{idUsuario}")
     public ResponseEntity<String> removerUsuario(@PathVariable String idUsuario) {
         userService.removerUsuario(idUsuario);
-
         return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
     }
     

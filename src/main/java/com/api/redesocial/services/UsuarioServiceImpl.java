@@ -19,7 +19,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepositorio repository;
 
-    ModelMapper mapper = new ModelMapper();
+    final ModelMapper mapper = new ModelMapper();
 
     @Override
     public List<UsuarioDto> obterTodosUsuarios() {
@@ -50,10 +50,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         return mapper.map(usuarioInserido, UsuarioDto.class);
     }
 
+
     @Override
     public void realizarAmizade(String id1, String id2) {
+
         Optional<UsuarioDto> user1Dto = obterPorId(id1);
         Optional<UsuarioDto> user2Dto = obterPorId(id2);
+
         Usuario user1 = mapper.map(user1Dto.get(), Usuario.class);
         Usuario user2 = mapper.map(user2Dto.get(), Usuario.class);
 
@@ -77,6 +80,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         repository.save(user1);
         repository.save(user2);
+
     }
 
     @Override
