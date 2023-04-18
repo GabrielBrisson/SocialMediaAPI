@@ -1,5 +1,6 @@
 package com.api.redesocial.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.redesocial.model.Message;
 import com.api.redesocial.model.Usuario;
 import com.api.redesocial.repository.UsuarioRepositorio;
 import com.api.redesocial.shared.UsuarioDto;
@@ -19,7 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepositorio repository;
 
-    final ModelMapper mapper = new ModelMapper();
+    ModelMapper mapper = new ModelMapper();
 
     @Override
     public List<UsuarioDto> obterTodosUsuarios() {
@@ -50,13 +52,38 @@ public class UsuarioServiceImpl implements UsuarioService {
         return mapper.map(usuarioInserido, UsuarioDto.class);
     }
 
+    @Override
+    public void criarMensagem(String mensagem, String id) {
+        Optional<UsuarioDto> dto = obterPorId(id);
+
+        Usuario user = repository.findById(dto.get().getId()).orElseThrow();
+
+        if (user.getMessage() == null) {
+            user.setMessage(new ArrayList<Message>());
+        }
+
+        Message message = new Message();
+        message.setValue(mensagem);
+        message.setDataCriacao(LocalDateTime.now());
+
+        user.getMessage().add(message);
+
+        repository.save(user);
+    }
 
     @Override
-    public void realizarAmizade(String id1, String id2) {
+    public UsuarioDto atualizarUsuario(String id, UsuarioDto usuarioDto) {
+        Usuario usuario = mapper.map(usuarioDto, Usuario.class);
+        usuario.setId(id);
+        Usuario atualizarUsuario = repository.save(usuario);
 
+        return mapper.map(atualizarUsuario, UsuarioDto.class);
+    }
+
+    @Override
+    public Boolean realizarAmizade(String id1, String id2) {
         Optional<UsuarioDto> user1Dto = obterPorId(id1);
         Optional<UsuarioDto> user2Dto = obterPorId(id2);
-
         Usuario user1 = mapper.map(user1Dto.get(), Usuario.class);
         Usuario user2 = mapper.map(user2Dto.get(), Usuario.class);
 
@@ -67,20 +94,30 @@ public class UsuarioServiceImpl implements UsuarioService {
             user2.setAmigo(new ArrayList<Usuario>());
         }
 
-        Usuario amigoUser1 = new Usuario();
-        amigoUser1.setId(user2.getId());
-        amigoUser1.setName(user2.getName());
+        boolean existe = false;
+        for (Usuario u : user1.getAmigo()) {
+            if (u.getId().equals(id2)) {
+                existe = true;
+            }
+        }
 
-        Usuario amigoUser2 = new Usuario();
-        amigoUser2.setId(user1.getId());
-        amigoUser2.setName(user1.getName());
+        if (!existe) {
+            Usuario amigoUser1 = new Usuario();
+            amigoUser1.setId(user2.getId());
+            amigoUser1.setName(user2.getName());
 
-        user1.getAmigo().add(amigoUser1);
-        user2.getAmigo().add(amigoUser2);
+            Usuario amigoUser2 = new Usuario();
+            amigoUser2.setId(user1.getId());
+            amigoUser2.setName(user1.getName());
 
-        repository.save(user1);
-        repository.save(user2);
+            user1.getAmigo().add(amigoUser1);
+            user2.getAmigo().add(amigoUser2);
 
+            repository.save(user1);
+            repository.save(user2);
+        }
+
+        return existe;
     }
 
     @Override
@@ -116,4 +153,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void removerUsuario(String id) {
         repository.deleteById(id);
     }
+
 }

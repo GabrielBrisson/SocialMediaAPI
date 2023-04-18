@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.api.redesocial.view.model.ObterUsuarioResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,10 +46,13 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/obterPorId/{id}")
-    public ResponseEntity<UsuarioDto> getUserById(@PathVariable String id) {
+    public ResponseEntity<ObterUsuarioResponse> getUserById(@PathVariable String id) {
         Optional<UsuarioDto> userDto = userService.obterPorId(id);
-        return userDto.map(usuarioDto -> new ResponseEntity<>(usuarioDto, HttpStatus.FOUND))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (userDto.isPresent()) {
+            ObterUsuarioResponse response = mapper.map(userDto.get(), ObterUsuarioResponse.class);
+            return new ResponseEntity<>(response, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/consultarAmizade/{id}")
@@ -70,9 +74,12 @@ public class UsuarioController {
     }
     
     @PostMapping(value = "/criarMensagem/{id}")
-    public ResponseEntity<Void> criarMensagem(@PathVariable String id, @RequestBody Message mensagem) {
-        userService.criarMensagem(mensagem.getValue(), id);
+    public ResponseEntity<Void> criarMensagem(@PathVariable String id, @RequestBody String mensagem) {
 
+        if (mensagem == null || mensagem.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        userService.criarMensagem(mensagem, id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -87,11 +94,9 @@ public class UsuarioController {
     @PutMapping(value = "/realizarAmizade/{id1}/{id2}")
     public ResponseEntity<Void> realizarAmizade(@PathVariable String id1, @PathVariable String id2) {
         boolean existe = userService.realizarAmizade(id1, id2);
-
         if (existe) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -105,6 +110,7 @@ public class UsuarioController {
     @DeleteMapping(value = "/removerUsuario/{idUsuario}")
     public ResponseEntity<String> removerUsuario(@PathVariable String idUsuario) {
         userService.removerUsuario(idUsuario);
+
         return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
     }
     

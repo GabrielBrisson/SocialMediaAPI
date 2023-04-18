@@ -1,5 +1,4 @@
 <h1>Social Media API Project</h1>
-
 This is a social media API project made in Java using Spring boot and deployment by AWS 
 
 <h2>Table of Contents</h2>
