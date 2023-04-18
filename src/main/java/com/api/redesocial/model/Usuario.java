@@ -7,42 +7,40 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("usuarios")
 public class Usuario {
+
     @Id
     private String id;
     private String name;
-    private List<Message> message;
-    private List<Usuario> amigo;
+    private String profilePicture;
+
+    private List<Usuario> amigos;
 
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<Message> getMessage() {
-        return message;
-    }
-
-    public void setMessage(List<Message> mensagem) {
-        this.message = mensagem;
-    }
-
     public List<Usuario> getAmigo() {
-        return amigo;
+        return amigos;
     }
-
-    public void setAmigo(List<Usuario> amigo) {
-        this.amigo = amigo;
-    }    
-
+    public void setAmigo(List<Usuario> amigos) {
+        this.amigos = amigos;
+    }
+    
 }
