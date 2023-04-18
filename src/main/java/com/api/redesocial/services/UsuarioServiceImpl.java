@@ -65,6 +65,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Message message = new Message();
         message.setValue(mensagem);
         message.setDataCriacao(LocalDateTime.now());
+        message.setUsername(user.getName());
 
         user.getMessage().add(message);
 
@@ -152,6 +153,28 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void removerUsuario(String id) {
         repository.deleteById(id);
+    }
+
+    /*TODO:
+    * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    * !!PELO AMOR DE DEUS, MELHORAR ISSO 0_0 0_0 0_0 !!
+    * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    * */
+    @Override
+    public List<Message> getUserFeed(String id) {
+        Optional<UsuarioDto> usuarioDtoOpt = obterPorId(id);
+        if (usuarioDtoOpt.isPresent()) {
+            List<Message> msgAmigos = new ArrayList<>();
+            List<Usuario> usuarioDto = usuarioDtoOpt.get().getAmigo();
+            usuarioDto.forEach(amigoUser -> {
+                Usuario amigo = repository.findById(amigoUser.getId()).get();
+                if(amigo != null && amigo.getMessage() != null) {
+                    amigo.getMessage().forEach(msgAmigos::add);
+                }
+            });
+            return msgAmigos;
+        }
+        return new ArrayList<>();
     }
 
 }

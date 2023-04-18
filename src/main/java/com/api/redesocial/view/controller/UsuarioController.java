@@ -65,6 +65,12 @@ public class UsuarioController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/obterUserFeed/{id}")
+    public ResponseEntity<List<Message>> obterUserFeed(@PathVariable String id) {
+        List<Message> messages = userService.getUserFeed(id);
+        return new ResponseEntity<>(messages, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/registrarUsuario")
     public ResponseEntity<UsuarioResponse> registrarUsuario(@RequestBody UsuarioRequest request) {
         UsuarioDto usuarioDto = mapper.map(request, UsuarioDto.class);

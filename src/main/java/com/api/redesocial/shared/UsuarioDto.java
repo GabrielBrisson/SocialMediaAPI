@@ -10,8 +10,6 @@ public class UsuarioDto {
     private String id;
     private String name;
     private List<Message> message;
-
-
     private List<Usuario> amigo;
 
     public String getId() {

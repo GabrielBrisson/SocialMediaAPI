@@ -2,6 +2,8 @@ package com.api.redesocial.services;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.api.redesocial.model.Message;
 import com.api.redesocial.shared.UsuarioDto;
 
 public interface UsuarioService {
@@ -14,4 +16,5 @@ public interface UsuarioService {
     List<UsuarioDto> consultarAmizade(String id);
     void removerAmizade(String idUsuario, String idRemocao);
     void removerUsuario(String id);
+    List<Message> getUserFeed(String id);
 }

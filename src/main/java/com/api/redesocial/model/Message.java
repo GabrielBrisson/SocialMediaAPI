@@ -3,7 +3,9 @@ package com.api.redesocial.model;
 import java.time.LocalDateTime;
 
 public class Message {
+
     private String value;
+    private String username;
     private LocalDateTime dataCriacao;
 
     public String getValue() {
@@ -22,4 +24,11 @@ public class Message {
         this.dataCriacao = dataCriacao;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
