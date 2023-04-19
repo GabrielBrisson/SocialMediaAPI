@@ -50,7 +50,7 @@ public class UsuarioController {
         Optional<UsuarioDto> userDto = userService.obterPorId(id);
         if (userDto.isPresent()) {
             ObterUsuarioResponse response = mapper.map(userDto.get(), ObterUsuarioResponse.class);
-            return new ResponseEntity<>(response, HttpStatus.FOUND);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
