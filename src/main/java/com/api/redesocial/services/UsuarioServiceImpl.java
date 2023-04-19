@@ -33,6 +33,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public List<UsuarioDto> obterUsuarioPorNome(String name) {
+        List<Usuario> usuarios = repository.findByNomeContaining(name);
+
+        return usuarios.stream()
+                .map(usuario -> mapper.map(usuario, UsuarioDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<UsuarioDto> obterPorId(String id) {
         Optional<Usuario> usuarioOpt = repository.findById(id);
 

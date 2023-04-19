@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.redesocial.model.Message;
@@ -41,6 +42,17 @@ public class UsuarioController {
         .map(u -> mapper.map(u, UsuarioResponse.class))
         .collect(Collectors.toList());
         
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/obterUsuarioPorNome")
+    public ResponseEntity<List<UsuarioResponse>> getUsersByName(@RequestParam("name") String name) {
+        List<UsuarioDto> usersDto = userService.obterUsuarioPorNome(name);
+        
+        List<UsuarioResponse> response = usersDto.stream()
+        .map(u -> mapper.map(u, UsuarioResponse.class))
+        .collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

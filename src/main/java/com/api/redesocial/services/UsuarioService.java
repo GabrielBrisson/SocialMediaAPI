@@ -8,6 +8,7 @@ import com.api.redesocial.shared.UsuarioDto;
 
 public interface UsuarioService {
     List<UsuarioDto> obterTodosUsuarios();
+    List<UsuarioDto> obterUsuarioPorNome(String name);
     Optional<UsuarioDto> obterPorId(String id);
     UsuarioDto inserirUsuario(UsuarioDto usuarioDto);
     void criarMensagem(String mensagem, String id);
